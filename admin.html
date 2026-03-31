@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="assets/img/favicon2-no-bg.png" type="image/x-icon">
+
+    <!--=============== REMIX ICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== ADMIN CSS ===============-->
+    <link rel="stylesheet" href="assets/css/admin.css">
+
+    <title>SPLaSK – Admin Dashboard</title>
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="admin-login" class="admin-login">
+    <div class="admin-login__card">
+        <div class="admin-login__logo">
+            <img src="assets/img/favicon2-no-bg.png" alt="SPLaSK Logo">
+            <span class="admin-login__logo-text">SPLaSK</span>
+        </div>
+        <h1 class="admin-login__title">Admin Portal</h1>
+        <p class="admin-login__subtitle">Enter your admin token to access the dashboard.</p>
+
+        <form id="login-form" novalidate>
+            <div class="admin-login__field">
+                <i class="ri-lock-line admin-login__field-icon"></i>
+                <input
+                    type="password"
+                    id="login-token-input"
+                    class="admin-login__input"
+                    placeholder="Admin token"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+            <button type="submit" id="login-btn" class="admin-login__btn">
+                <i class="ri-login-box-line"></i> Login
+            </button>
+        </form>
+
+        <p id="login-error" class="admin-login__error" aria-live="polite"></p>
+
+        <a href="index.html" class="admin-login__back">
+            <i class="ri-arrow-left-line"></i> Back to main site
+        </a>
+    </div>
+</div>
+
+<!-- ==================== ADMIN APP ==================== -->
+<div id="admin-app" class="admin-app hidden">
+
+    <!-- Sidebar overlay (mobile) -->
+    <div id="sidebar-overlay" class="admin-sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="admin-sidebar" class="admin-sidebar" aria-label="Admin navigation">
+        <div class="admin-sidebar__header">
+            <img src="assets/img/favicon2-no-bg.png" alt="SPLaSK" class="admin-sidebar__logo">
+            <span class="admin-sidebar__brand">SPLaSK <span>ADMIN</span></span>
+        </div>
+
+        <nav class="admin-sidebar__nav">
+            <ul>
+                <li class="admin-nav__item">
+                    <a href="#" class="admin-nav__link active">
+                        <i class="ri-dashboard-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="admin-nav__item">
+                    <a href="index.html" class="admin-nav__link">
+                        <i class="ri-global-line"></i> Main Site
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="admin-sidebar__footer">
+            <button class="admin-sidebar__logout js-logout-btn" type="button">
+                <i class="ri-logout-box-r-line"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+
+        <!-- Topbar -->
+        <header class="admin-topbar">
+            <div class="admin-topbar__left">
+                <button id="sidebar-toggle" class="admin-topbar__menu-toggle" type="button" aria-label="Toggle sidebar">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <span class="admin-topbar__title">Compliance Dashboard</span>
+            </div>
+            <div class="admin-topbar__right">
+                <button id="theme-toggle" class="admin-topbar__theme-btn" type="button" aria-label="Toggle theme">
+                    <i class="ri-moon-line"></i>
+                </button>
+                <div class="admin-topbar__user">
+                    <div class="admin-topbar__avatar">AD</div>
+                    <span class="admin-topbar__username">Admin</span>
+                </div>
+                <button class="admin-topbar__back js-logout-btn" type="button">
+                    <i class="ri-logout-box-r-line"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Page -->
+        <main class="admin-page">
+
+            <!-- Page Header -->
+            <div class="admin-page-header">
+                <h1>Admin Dashboard</h1>
+                <p>Monitor and review website compliance scan results.</p>
+            </div>
+
+            <!-- ===== SUMMARY CARDS ===== -->
+            <div class="admin-stats-grid">
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-card__icon-wrap">
+                        <i class="ri-global-line"></i>
+                    </div>
+                    <div class="admin-stat-card__body">
+                        <p class="admin-stat-card__label">Total Websites</p>
+                        <h2 class="admin-stat-card__value" id="stat-total-websites">—</h2>
+                        <p class="admin-stat-card__sub" id="stat-scans-sub">&nbsp;</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-card__icon-wrap admin-stat-card__icon-wrap--blue">
+                        <i class="ri-bar-chart-grouped-line"></i>
+                    </div>
+                    <div class="admin-stat-card__body">
+                        <p class="admin-stat-card__label">Total Scans</p>
+                        <h2 class="admin-stat-card__value" id="stat-total-scans">—</h2>
+                        <p class="admin-stat-card__sub">
+                            <span id="stat-failed" style="color:var(--danger);font-weight:600">0</span> failed
+                        </p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-card__icon-wrap admin-stat-card__icon-wrap--orange">
+                        <i class="ri-percent-line"></i>
+                    </div>
+                    <div class="admin-stat-card__body">
+                        <p class="admin-stat-card__label">Average Score</p>
+                        <h2 class="admin-stat-card__value" id="stat-avg-score">—</h2>
+                        <p class="admin-stat-card__sub">across completed scans</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-card__icon-wrap admin-stat-card__icon-wrap--purple">
+                        <i class="ri-shield-check-line"></i>
+                    </div>
+                    <div class="admin-stat-card__body">
+                        <p class="admin-stat-card__label">Overall Compliance</p>
+                        <h2 class="admin-stat-card__value" id="stat-compliance">—</h2>
+                        <p class="admin-stat-card__sub" id="stat-compliance-sub">&nbsp;</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== RECENT SCANS TABLE ===== -->
+            <div class="admin-card">
+                <div class="admin-card__header">
+                    <h2><i class="ri-list-check-2" style="margin-right:0.4rem;color:var(--primary)"></i>Recent Scans</h2>
+                    <div class="admin-card__toolbar">
+                        <div class="admin-search-wrap">
+                            <i class="ri-search-line"></i>
+                            <input
+                                type="search"
+                                id="scan-search"
+                                class="admin-search-input"
+                                placeholder="Search by URL…"
+                                aria-label="Search scans by URL"
+                            >
+                        </div>
+                        <select id="scan-status-filter" class="admin-select" aria-label="Filter by status">
+                            <option value="">All Statuses</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="FAILED">Failed</option>
+                            <option value="PROCESSING">Processing</option>
+                        </select>
+                        <button id="refresh-btn" class="admin-btn admin-btn--outline" type="button" title="Refresh table">
+                            <i class="ri-refresh-line"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-table-wrap">
+                    <table class="admin-table" role="table">
+                        <thead>
+                            <tr>
+                                <th style="width:46px">#</th>
+                                <th>Website URL</th>
+                                <th style="width:160px">Score</th>
+                                <th style="width:120px">Status</th>
+                                <th style="width:160px">Date Scanned</th>
+                                <th style="width:90px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body">
+                            <tr>
+                                <td colspan="6" class="admin-state">
+                                    <span class="admin-spinner admin-spinner--dark"></span>
+                                    <p style="margin-top:0.75rem">Loading…</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="admin-pagination" id="admin-pagination"></div>
+
+            </div>
+            <!-- end .admin-card -->
+
+        </main>
+    </div>
+    <!-- end .admin-content -->
+
+</div>
+<!-- end #admin-app -->
+
+<!-- ==================== VIEW RESULT MODAL ==================== -->
+<div id="result-modal" class="admin-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-url">
+
+    <div id="modal-backdrop" class="admin-modal__backdrop"></div>
+
+    <div class="admin-modal__dialog">
+
+        <!-- Modal Header -->
+        <div class="admin-modal__header">
+            <div class="admin-modal__header-info">
+                <h2 class="admin-modal__url" id="modal-url">—</h2>
+                <div class="admin-modal__meta" id="modal-meta"></div>
+            </div>
+            <button id="modal-close" class="admin-modal__close" type="button" aria-label="Close modal">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+
+        <!-- Score Summary Row -->
+        <div class="admin-modal__summary">
+            <div class="modal-summary-cell">
+                <p class="modal-summary-cell__label">Overall Score</p>
+                <p class="modal-summary-cell__value" id="modal-score">—</p>
+            </div>
+            <div class="modal-summary-cell">
+                <p class="modal-summary-cell__label">Scan Status</p>
+                <p id="modal-status" style="padding-top:0.2rem">—</p>
+            </div>
+            <div class="modal-summary-cell">
+                <p class="modal-summary-cell__label">Compliance</p>
+                <p class="modal-summary-cell__value" id="modal-overall-score">—</p>
+            </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="admin-modal__body" id="modal-categories">
+            <!-- Populated by admin.js -->
+        </div>
+
+    </div>
+</div>
+
+<!--=============== JS ===============-->
+<script>
+    // Allow admin.js to use the correct API base URL.
+    window.SPLASK_API_BASE_URL = 'http://localhost:3000'
+</script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

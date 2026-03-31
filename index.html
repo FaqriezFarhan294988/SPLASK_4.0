@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--=============== FAVICON ===============-->
+        <link rel="shortcut icon" href="assets/img/favicon2-no-bg.png" type="image/x-icon">
+
+        <!--=============== REMIX ICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+        <!--=============== BOOTSTRAP ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assets/css/styles.css">
+
+        <title>SPLaSK - Website Checker</title>
+    </head>
+    <body>
+        <!--==================== HEADER ====================-->
+        <header class="header" id="header">
+            <nav class="nav container">
+                <a href="#" class="nav__logo">
+                    <img src="assets/img/favicon2-no-bg.png" alt="SPLaSK Logo" class="nav__logo-img"> SPLaSK
+                </a>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="#home" class="nav__link active-link">Home</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#dashboard" class="nav__link">Dashboard</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#about" class="nav__link">About</a>
+                        </li>
+                        <li class="nav__item nav__item--dropdown">
+                            <a href="#products" class="nav__link">Criteria <i class="ri-arrow-down-s-line" style="font-size: 0.95rem;"></i></a>
+                            <ul class="nav__submenu">
+                                <li><a href="#products" class="nav__submenu-link">Accessibility</a></li>
+                                <li><a href="#products" class="nav__submenu-link">Ease of Use</a></li>
+                                <li><a href="#products" class="nav__submenu-link">Quality of Content</a></li>
+                                <li><a href="#products" class="nav__submenu-link">Privacy/Security</a></li>
+                                <li><a href="#products" class="nav__submenu-link">Responsiveness</a></li>
+                                <li><a href="#products" class="nav__submenu-link">Reliability</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#faqs" class="nav__link">FAQs</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#contact" class="nav__link">Contact Us</a>
+                        </li>
+                        <li class="nav__item">
+                            <i class="ri-moon-line change-theme" id="theme-button"></i>
+                        </li>
+                    </ul>
+
+                    <div class="nav__close" id="nav-close">
+                        <i class="ri-close-line"></i>
+                    </div>
+                </div>
+
+                <div class="nav__btns">
+                    <div class="nav__toggle" id="nav-toggle">
+                        <i class="ri-menu-line"></i>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <!--==================== HOME ====================-->
+            <section class="home" id="home">
+                <div class="home__container container grid">
+                    <img src="assets/img/home2-no-bg.png" alt="" class="home__img">
+
+                    <div class="home__data">
+                        <h1 class="home__title">
+                            Smarter scan <br> for better website
+                        </h1>
+                        <p class="home__description">
+                            Scan, analyze, and improve your government website with intelligent compliance checking.
+                        </p>
+                        <div class="home__scan">
+                            <input type="url" id="scan-url-input" placeholder="Enter your website URL" class="home__input">
+                            <button id="scan-now-button" class="button button--flex button--small" type="button">
+                                Scan Now <i class="ri-arrow-right-up-line button__icon"></i>
+                            </button>
+                        </div>
+                        <p class="home__scan-status" id="scan-status-message" aria-live="polite"></p>
+                    </div>
+
+                    <div class="home__social">
+                        <span class="home__social-follow">Follow Us</span>
+
+                        <div class="home__social-links">
+                            <a href="https://www.facebook.com/" target="_blank" class="home__social-link">
+                                <i class="ri-facebook-fill"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" target="_blank" class="home__social-link">
+                                <i class="ri-instagram-line"></i>
+                            </a>
+                            <a href="https://twitter.com/" target="_blank" class="home__social-link">
+                                <i class="ri-twitter-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== DASHBOARD ====================-->
+            <section class="dashboard section container" id="dashboard">
+                <div class="dashboard__header">
+                    <h2 class="section__title">Compliance Dashboard</h2>
+                    <p class="dashboard__subtitle">
+                        Live compliance analytics from scanned websites.
+                    </p>
+                </div>
+
+                <div class="dashboard__summary grid">
+                    <article class="dashboard__card dashboard__card--total">
+                        <p class="dashboard__label">Total Score</p>
+                        <h3 class="dashboard__value" id="total-score">0%</h3>
+                        <span class="dashboard__status" id="overall-status">N/A</span>
+                    </article>
+
+                    <article class="dashboard__card">
+                        <p class="dashboard__label">Total Scanned Websites</p>
+                        <h3 class="dashboard__value" id="total-websites">0</h3>
+                    </article>
+
+                    <article class="dashboard__card">
+                        <p class="dashboard__label">Latest Scan Date</p>
+                        <h3 class="dashboard__value dashboard__value--small" id="latest-scan-date">-</h3>
+                    </article>
+                </div>
+
+                <div class="dashboard__panel grid">
+                    <div class="dashboard__box dashboard__box--chart">
+                        <h3 class="dashboard__box-title">Category Scores</h3>
+                        <canvas id="compliance-chart" height="250"></canvas>
+                    </div>
+
+                    <div class="dashboard__box">
+                        <h3 class="dashboard__box-title">Category Scores & Validation</h3>
+                        <div class="dashboard__categories" id="category-list">
+                            <p class="dashboard__empty">No category data yet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard__actions">
+                    <button id="export-pdf-button" class="button button--flex" type="button" disabled>
+                        <i class="ri-file-pdf-line"></i> Export to PDF
+                    </button>
+                    <button id="clear-dashboard-button" class="button button--flex" type="button">
+                        <i class="ri-delete-bin-line"></i> Clear Dashboard
+                    </button>
+                </div>
+
+            </section>
+
+            <!--==================== ABOUT ====================-->
+            <section class="about section container" id="about">
+                <div class="about__container grid">
+                    <img src="assets/img/about2-no-bg.png" alt="" class="about__img">
+
+                    <div class="about__data">
+                        <h2 class="section__title about__title">
+                            Trusted compliance <br> made simple
+                        </h2>
+
+                        <p class="about__description">
+                            provide a reliable compliance checking platform trusted for delivering accurate results and helping organizations meet Malaysian government standards.
+                        </p>
+
+                        <div class="about__details">
+                            <p class="about__details-description">
+                                <i class="ri-checkbox-fill about__details-icon"></i>
+                                Accurate compliance scoring system.
+                            </p>
+                            <p class="about__details-description">
+                                <i class="ri-checkbox-fill about__details-icon"></i>
+                                Continuous monitoring and analysis.
+                            </p>
+                            <p class="about__details-description">
+                                <i class="ri-checkbox-fill about__details-icon"></i>
+                                User-friendly interface and reports.
+                            </p>
+                            <p class="about__details-description">
+                                <i class="ri-checkbox-fill about__details-icon"></i>
+                                Built for performance and scalability.
+                            </p>
+                        </div>
+
+                        <a href="#" class="button--link button--flex">
+                            Scan Now <i class="ri-arrow-right-down-line button__icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== STEPS ====================-->
+            <section class="steps section container">
+                <div class="steps__bg">
+                    <h2 class="section__title-center steps__title">
+                        How it works <br> in 3 easy steps
+                    </h2>
+
+                    <div class="steps__container grid">
+                        <div class="steps__card">
+                            <div class="steps__card-number">01</div>
+                            <h3 class="steps__card-title">Enter Website URL</h3>
+                            <p class="steps__card-description">
+                                Input your website link to begin the compliance scanning process.
+                            </p>
+                        </div>
+
+                        <div class="steps__card">
+                            <div class="steps__card-number">02</div>
+                            <h3 class="steps__card-title">Run Automated Scan</h3>
+                            <p class="steps__card-description">
+                                Our system analyzes your website against Malaysian government standards.
+                            </p>
+                        </div>
+
+                        <div class="steps__card">
+                            <div class="steps__card-number">03</div>
+                            <h3 class="steps__card-title">Get Detailed Results</h3>
+                            <p class="steps__card-description">
+                                Receive your compliance score with actionable insights and recommendations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== PRODUCTS ====================-->
+            <section class="product section" id="products">
+                <div class="container">
+                    <h2 class="section__title-center">
+                        Explore our compliance criteria
+                    </h2>
+
+                    <p class="product__description">
+                        Discover the key standards used to evaluate your website, ensuring full alignment with Malaysian government requirements.
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-check-line" style="font-size: 2rem; color: #28a745; line-height: 1; width: 2rem; height: 2rem;" aria-hidden="true"></i>
+                                    <h5 class="card-title fw-bold mt-3">Accessibility Compliance</h5>
+                                    <p class="card-text text-muted">Ensuring websites are accessible to all users,including those with disabilities </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-speed-line" style="font-size: 2rem; color: #28a745;"></i>
+                                    <h5 class="card-title fw-bold mt-3">Performance Optimization</h5>
+                                    <p class="card-text text-muted">Optimizing website speed and performance for better user experience.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-shield-check-line" style="font-size: 2rem; color: #28a745;"></i>
+                                    <h5 class="card-title fw-bold mt-3">Security Standards</h5>
+                                    <p class="card-text text-muted">Implementing robust security measures to protect user data and privacy.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-file-text-line" style="font-size: 2rem; color: #28a745;"></i>
+                                    <h5 class="card-title fw-bold mt-3">Content Quality</h5>
+                                    <p class="card-text text-muted">Ensuring high-quality, accurate, and relevant content across the website.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-smartphone-line" style="font-size: 2rem; color: #28a745;"></i>
+                                    <h5 class="card-title fw-bold mt-3">Responsiveness</h5>
+                                    <p class="card-text text-muted">Designing websites that work seamlessly across all devices and screen sizes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body text-center p-4">
+                                    <i class="ri-feedback-line" style="font-size: 2rem; color: #28a745;"></i>
+                                    <h5 class="card-title fw-bold mt-3">User Feedback System</h5>
+                                    <p class="card-text text-muted">Collect user feedback through integrated forms like &lt;splwpk-feedback-form&gt; and standard &lt;form&gt; elements.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== QUESTIONS ====================-->
+            <section class="questions section" id="faqs">
+                <h2 class="section__title-center questions__title container">
+                    Some common questions <br> were often asked
+                </h2>
+
+                <div class="questions__container container grid">
+                    <div class="questions__group">
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    Why is my website failing compliance checks?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    Your website may not meet required standards such as accessibility, responsiveness, or proper structure based on Malaysian government guidelines.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    What does the compliance score mean?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    The compliance score reflects how well your website meets all required rules. A higher score means better alignment with official standards.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    Why are some elements marked as errors?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    Errors appear when your website does not follow specific compliance rules such as missing tags, poor structure, or invalid components.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="questions__group">
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    How do I start a compliance scan?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    Simply enter your website URL in the input field and click “Scan Website.” The system will automatically analyze your site.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    Can I improve my score after scanning?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    Yes. SPLaSK provides recommendations so you can fix issues and rescan your website to achieve a better score.
+                            </div>
+                        </div>
+
+                        <div class="questions__item">
+                            <header class="questions__header">
+                                <i class="ri-add-line questions__icon"></i>
+                                <h3 class="questions__item-title">
+                                    What is the feedback form requirement?
+                                </h3>
+                            </header>
+
+                            <div class="questions__content">
+                                <p class="questions__description">
+                                    Your website must include <splwpk-feedback-form> and a valid <form> element to meet responsiveness and user feedback standards.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== CONTACT ====================-->
+            <section class="contact section container" id="contact">                
+                <div class="contact__container grid">
+                    <div class="contact__box">
+                        <h2 class="section__title">
+                            Reach out to us today <br> via any of the given <br> information
+                        </h2>
+
+                        <div class="contact__data">
+                            <div class="contact__information">
+                                <h3 class="contact__subtitle">Call us for instant support</h3>
+                                <span class="contact__description">
+                                    <i class="ri-phone-line contact__icon"></i>
+                                    +999 888 777
+                                </span>
+                            </div>
+
+                            <div class="contact__information">
+                                <h3 class="contact__subtitle">Write us by mail</h3>
+                                <span class="contact__description">
+                                    <i class="ri-mail-line contact__icon"></i>
+                                    user@email.com
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="" class="contact__form">
+                        <div class="contact__inputs">
+                            <div class="contact__content">
+                                <input type="email" placeholder=" " class="contact__input">
+                                <label for="" class="contact__label">Email</label>
+                            </div>
+
+                            <div class="contact__content">
+                                <input type="text" placeholder=" " class="contact__input">
+                                <label for="" class="contact__label">Subject</label>
+                            </div>
+
+                            <div class="contact__content contact__area">
+                                <textarea name="message" placeholder=" " class="contact__input"></textarea>                              
+                                <label for="" class="contact__label">Message</label>
+                            </div>
+                        </div>
+
+                        <button class="button button--flex">
+                            Send Message
+                            <i class="ri-arrow-right-up-line button__icon"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <!--==================== FOOTER ====================-->
+        <footer class="footer section">
+            <div class="footer__container container grid">
+
+                <!-- Company Info -->
+                <div class="footer__content footer__content--brand">
+                    <a href="#" class="footer__logo">
+                        <img src="assets/img/favicon2-no-bg.png" alt="SPLaSK Logo" class="nav__logo-img"> SPLaSK
+                    </a>
+                    <ul class="footer__data footer__address">
+                        <li class="footer__information">
+                            <i class="ri-map-pin-line footer__info-icon"></i>
+                            <span>Aidan Technologies Sdn Bhd<br>
+                            100-1, Jalan 2/23A,<br>
+                            Taman Danau Kota,<br>
+                            53300 Setapak, Kuala Lumpur,<br>
+                            Malaysia</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Overview (matches nav menu) -->
+                <div class="footer__content">
+                    <h3 class="footer__title">OVERVIEW</h3>
+                    <ul class="footer__data footer__links">
+                        <li><a href="#home" class="footer__link">Home</a></li>
+                        <li><a href="#dashboard" class="footer__link">Dashboard</a></li>
+                        <li><a href="#about" class="footer__link">About</a></li>
+                        <li><a href="#products" class="footer__link">Criteria</a></li>
+                        <li><a href="#faqs" class="footer__link">FAQs</a></li>
+                        <li><a href="#contact" class="footer__link">Contact Us</a></li>
+                        <li><a href="admin.html" class="footer__link"><i class="ri-shield-user-line"></i> Admin</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer__content">
+                    <h3 class="footer__title">CONTACT INFO</h3>
+                    <ul class="footer__data">
+                        <li class="footer__information">
+                            <i class="ri-phone-line footer__info-icon"></i>
+                            <span>607437828</span>
+                        </li>
+                        <li class="footer__information">
+                            <i class="ri-mail-line footer__info-icon"></i>
+                            <a href="mailto:aidan@aidan.my" class="footer__link">aidan@aidan.my</a>
+                        </li>
+                        <li class="footer__information">
+                            <i class="ri-global-line footer__info-icon"></i>
+                            <a href="https://aidantech.com" target="_blank" rel="noopener noreferrer" class="footer__link">aidantech.com</a>
+                        </li>
+                    </ul>
+                    <div class="footer__social">
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+                            <i class="ri-instagram-line"></i>
+                        </a>
+                        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+                            <i class="ri-twitter-fill"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Opening Hours -->
+                <div class="footer__content">
+                    <h3 class="footer__title">OPENING HOURS</h3>
+                    <ul class="footer__data">
+                        <li class="footer__information">
+                            <i class="ri-calendar-line footer__info-icon"></i>
+                            <span>Monday to Friday<br>9:00 am - 5:00 pm</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <p class="footer__copy">&copy; 2026 Aidan Technologies Sdn Bhd. All rights reserved.</p>
+        </footer>
+        
+        <!--=============== SCROLL UP ===============-->
+        <a href="#" class="scrollup" id="scroll-up"> 
+            <i class="ri-arrow-up-fill scrollup__icon"></i>
+        </a>
+
+        <!--=============== SCROLL REVEAL ===============-->
+        <script src="assets/js/scrollreveal.min.js"></script>
+
+        <!--=============== BOOTSTRAP ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!--=============== CHART JS ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!--=============== jsPDF + AutoTable ===============-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
+        <!--=============== PDF EXPORT ===============-->
+        <script src="assets/js/pdfExport.js"></script>
+        
+        <!--=============== MAIN JS ===============-->
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
