@@ -7,9 +7,9 @@ dotenv.config();
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'splask_db',
+  user: process.env.DB_USER || 'app_splask',
+  password: process.env.DB_PASSWORD || 'a#QALl6tsH,8_diu,zhH.qBSB~-2qQFL',
+  database: process.env.DB_NAME || 'app_splask',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
