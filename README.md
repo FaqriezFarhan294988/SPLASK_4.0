@@ -1,13 +1,12 @@
-# Responsive Plants Website 🎍 
-## [Watch it on youtube](https://youtu.be/lpzExNZDizI)
-### Responsive Plants Website 🎍
 
-- Responsive Plants Website Using HTML, CSS and JavaScript.
-- Contains animations when scrolling.
-- Includes a dark and light mode.
-- Developed first with the Mobile First methodology, then for desktop.
-- Compatible with all mobile devices and with a beautiful and pleasant user interface.
 
-Join the channel to see more videos like this. [Bedimcode](https://www.youtube.com/c/Bedimcode)
+- Website Evaluation System (SPLaSK) developed using HTML, CSS, JavaScript, and Java Servlet.
+- Implements a crawler using Jsoup to automatically scan and analyze website content.
+- Evaluates websites based on six categories: Accessibility, Ease of Use, Quality of Content, Privacy & Security, Responsiveness, and Reliability.
+- Includes automated scoring system with real-time calculation of results.
+- Integrates external API (SerpAPI) to validate search engine visibility.
+- Provides a dashboard to display total score, category breakdown, and scan history.
 
-![plants website](/preview.png)
+
+
+

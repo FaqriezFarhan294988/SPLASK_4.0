@@ -68,8 +68,13 @@
         <nav class="admin-sidebar__nav">
             <ul>
                 <li class="admin-nav__item">
-                    <a href="#" class="admin-nav__link active">
+                    <a href="#" class="admin-nav__link active" data-page="dashboard">
                         <i class="ri-dashboard-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="admin-nav__item">
+                    <a href="#" class="admin-nav__link" data-page="messages">
+                        <i class="ri-mail-line"></i> Messages
                     </a>
                 </li>
                 <li class="admin-nav__item">
@@ -114,6 +119,9 @@
 
         <!-- Page -->
         <main class="admin-page">
+
+            <!-- ===== DASHBOARD PAGE ===== -->
+            <div id="page-dashboard" class="admin-page-section">
 
             <!-- Page Header -->
             <div class="admin-page-header">
@@ -227,6 +235,54 @@
             </div>
             <!-- end .admin-card -->
 
+            </div>
+            <!-- end #page-dashboard -->
+
+            <!-- ===== MESSAGES PAGE ===== -->
+            <div id="page-messages" class="admin-page-section hidden">
+
+                <div class="admin-page-header">
+                    <h1>Contact Messages</h1>
+                    <p>Messages submitted by visitors through the contact form.</p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card__header">
+                        <h2><i class="ri-mail-line" style="margin-right:0.4rem;color:var(--primary)"></i>Messages</h2>
+                        <div class="admin-card__toolbar">
+                            <button id="messages-refresh-btn" class="admin-btn admin-btn--outline" type="button" title="Refresh messages">
+                                <i class="ri-refresh-line"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table" role="table">
+                            <thead>
+                                <tr>
+                                    <th style="width:46px">#</th>
+                                    <th style="width:200px">Email</th>
+                                    <th style="width:200px">Subject</th>
+                                    <th>Message</th>
+                                    <th style="width:180px">Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messages-table-body">
+                                <tr>
+                                    <td colspan="5" class="admin-state">
+                                        <p>No messages yet.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="admin-pagination" id="messages-pagination"></div>
+                </div>
+
+            </div>
+            <!-- end #page-messages -->
+
         </main>
     </div>
     <!-- end .admin-content -->
@@ -281,6 +337,6 @@
     // Allow admin.js to use the correct API base URL.
     window.SPLASK_API_BASE_URL = 'http://localhost:3000'
 </script>
-<script src="assets/js/admin.js"></script>
+<script src="assets/js/admin.js?v=2"></script>
 </body>
 </html>

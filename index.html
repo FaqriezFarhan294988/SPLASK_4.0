@@ -37,16 +37,8 @@
                         <li class="nav__item">
                             <a href="#about" class="nav__link">About</a>
                         </li>
-                        <li class="nav__item nav__item--dropdown">
-                            <a href="#products" class="nav__link">Criteria <i class="ri-arrow-down-s-line" style="font-size: 0.95rem;"></i></a>
-                            <ul class="nav__submenu">
-                                <li><a href="#products" class="nav__submenu-link">Accessibility</a></li>
-                                <li><a href="#products" class="nav__submenu-link">Ease of Use</a></li>
-                                <li><a href="#products" class="nav__submenu-link">Quality of Content</a></li>
-                                <li><a href="#products" class="nav__submenu-link">Privacy/Security</a></li>
-                                <li><a href="#products" class="nav__submenu-link">Responsiveness</a></li>
-                                <li><a href="#products" class="nav__submenu-link">Reliability</a></li>
-                            </ul>
+                        <li class="nav__item">
+                            <a href="#products" class="nav__link">Criteria</a>
                         </li>
                         <li class="nav__item">
                             <a href="#faqs" class="nav__link">FAQs</a>
@@ -421,7 +413,7 @@
                 <div class="contact__container grid">
                     <div class="contact__box">
                         <h2 class="section__title">
-                            Reach out to us today <br> via any of the given <br> information
+                            Partner with us <br> to build your digital <br> presence
                         </h2>
 
                         <div class="contact__data">
@@ -429,7 +421,7 @@
                                 <h3 class="contact__subtitle">Call us for instant support</h3>
                                 <span class="contact__description">
                                     <i class="ri-phone-line contact__icon"></i>
-                                    +999 888 777
+                                    +607437828
                                 </span>
                             </div>
 
@@ -437,34 +429,35 @@
                                 <h3 class="contact__subtitle">Write us by mail</h3>
                                 <span class="contact__description">
                                     <i class="ri-mail-line contact__icon"></i>
-                                    user@email.com
+                                    aidan@aidan.com
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <form action="" class="contact__form">
+                    <form id="contact-form" class="contact__form" novalidate>
                         <div class="contact__inputs">
                             <div class="contact__content">
-                                <input type="email" placeholder=" " class="contact__input">
-                                <label for="" class="contact__label">Email</label>
+                                <input type="email" id="contact-email" placeholder=" " class="contact__input" required>
+                                <label for="contact-email" class="contact__label">Email</label>
                             </div>
 
                             <div class="contact__content">
-                                <input type="text" placeholder=" " class="contact__input">
-                                <label for="" class="contact__label">Subject</label>
+                                <input type="text" id="contact-subject" placeholder=" " class="contact__input" required>
+                                <label for="contact-subject" class="contact__label">Subject</label>
                             </div>
 
                             <div class="contact__content contact__area">
-                                <textarea name="message" placeholder=" " class="contact__input"></textarea>                              
-                                <label for="" class="contact__label">Message</label>
+                                <textarea id="contact-message" placeholder=" " class="contact__input" required></textarea>                              
+                                <label for="contact-message" class="contact__label">Message</label>
                             </div>
                         </div>
 
-                        <button class="button button--flex">
+                        <button type="button" id="contact-send-btn" class="button button--flex" onclick="sendContactMessage()">
                             Send Message
                             <i class="ri-arrow-right-up-line button__icon"></i>
                         </button>
+                        <p id="contact-status" style="margin-top: .75rem; font-size: .85rem;" aria-live="polite"></p>
                     </form>
                 </div>
             </section>
@@ -573,6 +566,57 @@
         <script src="assets/js/pdfExport.js"></script>
         
         <!--=============== MAIN JS ===============-->
-        <script src="assets/js/main.js"></script>
+        <script src="assets/js/main.js?v=3"></script>
+
+        <!--=============== CONTACT FORM HANDLER ===============-->
+        <script>
+        function sendContactMessage(){
+            var email = document.getElementById('contact-email').value.trim();
+            var subject = document.getElementById('contact-subject').value.trim();
+            var message = document.getElementById('contact-message').value.trim();
+            var sendBtn = document.getElementById('contact-send-btn');
+            var statusEl = document.getElementById('contact-status');
+
+            if(!email || !subject || !message){
+                statusEl.textContent = 'Please fill in all fields.';
+                statusEl.style.color = '#b3261e';
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = 'Sending...';
+            statusEl.textContent = '';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/api/contact', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function(){
+                if(xhr.status === 200 || xhr.status === 201){
+                    var data = JSON.parse(xhr.responseText);
+                    if(data.success){
+                        alert('Message sent successfully!');
+                        document.getElementById('contact-form').reset();
+                        statusEl.textContent = 'Message sent successfully!';
+                        statusEl.style.color = 'green';
+                    } else {
+                        statusEl.textContent = data.error || 'Failed to send message.';
+                        statusEl.style.color = '#b3261e';
+                    }
+                } else {
+                    statusEl.textContent = 'Server error. Please try again.';
+                    statusEl.style.color = '#b3261e';
+                }
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = 'Send Message <i class="ri-arrow-right-up-line button__icon"></i>';
+            };
+            xhr.onerror = function(){
+                statusEl.textContent = 'Cannot connect to server. Make sure backend is running.';
+                statusEl.style.color = '#b3261e';
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = 'Send Message <i class="ri-arrow-right-up-line button__icon"></i>';
+            };
+            xhr.send(JSON.stringify({ email: email, subject: subject, message: message }));
+        }
+        </script>
     </body>
 </html>

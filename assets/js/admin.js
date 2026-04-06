@@ -526,6 +526,113 @@
   }
 
   /* ======================================================
+     PAGE NAVIGATION
+  ====================================================== */
+  function initPageNav() {
+    const navLinks = document.querySelectorAll('.admin-nav__link[data-page]')
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const page = link.dataset.page
+        switchPage(page)
+      })
+    })
+  }
+
+  function switchPage(page) {
+    // Update nav active state
+    document.querySelectorAll('.admin-nav__link[data-page]').forEach((l) => l.classList.remove('active'))
+    const activeLink = document.querySelector(`.admin-nav__link[data-page="${page}"]`)
+    if (activeLink) activeLink.classList.add('active')
+
+    // Update topbar title
+    const topTitle = document.querySelector('.admin-topbar__title')
+    if (topTitle) topTitle.textContent = page === 'messages' ? 'Contact Messages' : 'Compliance Dashboard'
+
+    // Show/hide pages
+    document.querySelectorAll('.admin-page-section').forEach((sec) => sec.classList.add('hidden'))
+    const target = document.getElementById('page-' + page)
+    if (target) target.classList.remove('hidden')
+
+    // Load data for the page
+    if (page === 'messages') loadMessages(1)
+    if (page === 'dashboard') loadDashboard()
+  }
+
+  /* ======================================================
+     MESSAGES
+  ====================================================== */
+  let messagesPage = 1
+  let messagesTotalPages = 1
+
+  async function loadMessages(page) {
+    messagesPage = page || 1
+    const tbody = document.getElementById('messages-table-body')
+    if (!tbody) return
+
+    tbody.innerHTML = '<tr><td colspan="5" class="admin-state"><span class="admin-spinner admin-spinner--dark"></span><p style="margin-top:0.75rem">Loading…</p></td></tr>'
+
+    try {
+      const res = await fetch(apiUrl(`/api/admin/messages?page=${messagesPage}&limit=10`), { headers: authHeaders() })
+      if (!res.ok) throw new Error('Failed to load messages')
+      const { data } = await res.json()
+
+      messagesTotalPages = data.totalPages || 1
+      renderMessages(data.messages || [], data.total || 0, data.page || 1)
+      renderMessagesPagination()
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="5" class="admin-state"><p style="color:var(--danger)">Failed to load messages.</p></td></tr>`
+    }
+  }
+
+  function renderMessages(messages, total, page) {
+    const tbody = document.getElementById('messages-table-body')
+    if (!messages.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="admin-state"><p>No messages yet.</p></td></tr>'
+      return
+    }
+
+    const offset = (page - 1) * 10
+    tbody.innerHTML = messages.map((msg, i) => `
+      <tr>
+        <td>${offset + i + 1}</td>
+        <td>${esc(msg.email)}</td>
+        <td>${esc(msg.subject)}</td>
+        <td style="max-width:300px;white-space:pre-wrap;word-break:break-word">${esc(msg.message)}</td>
+        <td>${formatDate(msg.created_at)}</td>
+      </tr>
+    `).join('')
+  }
+
+  function renderMessagesPagination() {
+    const container = document.getElementById('messages-pagination')
+    if (!container) return
+
+    if (messagesTotalPages <= 1) { container.innerHTML = ''; return }
+
+    let html = ''
+    html += `<button class="admin-btn admin-btn--outline admin-btn--sm" ${messagesPage <= 1 ? 'disabled' : ''} data-msg-page="${messagesPage - 1}">← Prev</button>`
+    html += `<span style="padding:0 0.75rem;font-size:0.85rem">Page ${messagesPage} of ${messagesTotalPages}</span>`
+    html += `<button class="admin-btn admin-btn--outline admin-btn--sm" ${messagesPage >= messagesTotalPages ? 'disabled' : ''} data-msg-page="${messagesPage + 1}">Next →</button>`
+
+    container.innerHTML = html
+
+    container.querySelectorAll('[data-msg-page]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const p = parseInt(btn.dataset.msgPage)
+        if (p >= 1 && p <= messagesTotalPages) loadMessages(p)
+      })
+    })
+  }
+
+  function initMessages() {
+    const refreshBtn = document.getElementById('messages-refresh-btn')
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => loadMessages(messagesPage))
+    }
+  }
+
+  /* ======================================================
      INIT
   ====================================================== */
   async function init() {
@@ -536,6 +643,8 @@
     initSidebar()
     initAdminTheme()
     initSearchAndFilter()
+    initPageNav()
+    initMessages()
 
     const token = getToken()
     if (token) {

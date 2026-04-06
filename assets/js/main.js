@@ -126,20 +126,21 @@ themeButton.addEventListener('click', () => {
 })
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
-const sr = ScrollReveal({
-    origin: 'top',
-    distance: '60px',
-    duration: 2500,
-    delay: 400,
-    // reset: true
-})
+try{
+    const sr = ScrollReveal({
+        origin: 'top',
+        distance: '60px',
+        duration: 2500,
+        delay: 400,
+    })
 
-sr.reveal(`.home__data`)
-sr.reveal(`.home__img`, {delay: 500})
-sr.reveal(`.home__social`, {delay: 600})
-sr.reveal(`.about__img, .contact__box`,{origin: 'left'})
-sr.reveal(`.about__data, .contact__form`,{origin: 'right'})
-sr.reveal(`.steps__card, .product__card, .questions__group, .footer`,{interval: 100})
+    sr.reveal(`.home__data`)
+    sr.reveal(`.home__img`, {delay: 500})
+    sr.reveal(`.home__social`, {delay: 600})
+    sr.reveal(`.about__img, .contact__box`,{origin: 'left'})
+    sr.reveal(`.about__data, .contact__form`,{origin: 'right'})
+    sr.reveal(`.steps__card, .product__card, .questions__group, .footer`,{interval: 100})
+}catch(e){ console.warn('ScrollReveal init failed:', e) }
 
 /*=============== SPLASK DASHBOARD ===============*/
 const DASHBOARD_API_BASE = window.SPLASK_API_BASE_URL || 'http://localhost:3000'
@@ -542,10 +543,83 @@ function attachScanHandlers(){
 
 function initializeDashboard(){
     attachScanHandlers()
+    initContactForm()
 
     if(dashboardRefreshTimer){
         clearInterval(dashboardRefreshTimer)
     }
 }
 
-initializeDashboard()
+/*=============== CONTACT FORM ===============*/
+function initContactForm(){
+    const form = document.getElementById('contact-form')
+    if(!form) return
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+
+        const emailInput = document.getElementById('contact-email')
+        const subjectInput = document.getElementById('contact-subject')
+        const messageInput = document.getElementById('contact-message')
+        const sendBtn = document.getElementById('contact-send-btn')
+        const statusEl = document.getElementById('contact-status')
+
+        const email = emailInput.value.trim()
+        const subject = subjectInput.value.trim()
+        const message = messageInput.value.trim()
+
+        if(!email || !subject || !message){
+            statusEl.textContent = 'Please fill in all fields.'
+            statusEl.style.color = '#b3261e'
+            return
+        }
+
+        sendBtn.disabled = true
+        sendBtn.innerHTML = 'Sending... <i class="ri-loader-4-line button__icon"></i>'
+        statusEl.textContent = ''
+
+        try{
+            const response = await fetch(apiUrl('/api/contact'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, subject, message })
+            })
+
+            const data = await response.json()
+
+            if(response.ok && data.success){
+                // Show popup
+                alert('Message already sent!')
+                // Clear form
+                form.reset()
+                statusEl.textContent = 'Message sent successfully!'
+                statusEl.style.color = 'var(--first-color)'
+            }else{
+                statusEl.textContent = data.error || 'Failed to send message.'
+                statusEl.style.color = '#b3261e'
+            }
+        }catch(error){
+            statusEl.textContent = 'Cannot connect to server. Please try again later.'
+            statusEl.style.color = '#b3261e'
+        }finally{
+            sendBtn.disabled = false
+            sendBtn.innerHTML = 'Send Message <i class="ri-arrow-right-up-line button__icon"></i>'
+        }
+    })
+
+    form.dataset.handlerAttached = 'true'
+}
+
+try{
+    initializeDashboard()
+}catch(e){
+    console.error('Dashboard init failed:', e)
+}
+
+// Safety net: ensure contact form handler is attached even if earlier code fails
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form')
+    if(form && !form.dataset.handlerAttached){
+        initContactForm()
+    }
+})
